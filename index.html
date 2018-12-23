@@ -35,8 +35,10 @@
     <!-- External -->
     <script src="external/jquery-3.3.1.slim.min.js"></script>
     <script src="external/popper.min.js"></script>
-    <script src="external/bootstrap.min.css"></script>
+    <script src="external/bootstrap.min.js"></script>
     <script src="external/vue.js"></script>
+
+    <link async href="external/bootstrap.min.css" rel="stylesheet">
 </head>
 
 
@@ -48,8 +50,10 @@
           <input v-model="message">
 
 	  <ol>
-	    <li v-for="todo in todos">
-	      {{ todo.name }}
+	    <li v-for="item in todos"
+	        v-bind:todo="item"
+	        v-bind:key="item.id">
+	      {{ item.name }} <input v-model="item.name">
 	    </li>
 	  </ol>
 
@@ -67,15 +71,15 @@
 	    message: 'Hello there...',
 
 	    todos: [
-	       { name: 'event 1' },
-	       { name: 'event 2' },
-	       { name: 'event 3' }
+	       { id:1, name:'event 1' },
+	       { id:2, name:'event 2' },
+	       { id:3, name:'event 3' }
 	     ]
 	  },
 
 	  methods: {
 	    event_add: function () {
-	       this.todos.push({ name: 'event' + this.todos.length }) ;
+	       this.todos.push({ name: 'event ' + (this.todos.length+1) }) ;
 	    }
 	  }
 	}) ;
