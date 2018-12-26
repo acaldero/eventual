@@ -49,15 +49,36 @@
 
 <body>
 
-        <h1>TimeLine</h1>
+        <h1>Event TimeLine</h1>
 
+        <!-- timeline -->
         <p></p>
+
+        <textarea id="data"></textarea>
+
+	<div class="buttons">
+	  <input type="button" id="load" 
+                 value="&darr; Load" 
+                 onclick="timeline_json2items(items, data_txt.value);
+		          timeline.fit();
+                          return false;"
+                 title="Load data from textarea into the Timeline">
+	  <input type="button" id="save" 
+                 value="&uarr; Save" 
+                 onclick="data_txt.value = timeline_items2json(items);
+                          return false;"
+                 title="Save data from the Timeline into the textarea">
+	</div>
+
 	<div id="visualization"></div>
 
+        <!-- Vue -->
         <p></p>
+
 	<div id="app">
 	  {{ message }}
           <br/>
+
 	  <ol>
 	    <li v-for="item in items"
 	        v-bind:todo="item"
@@ -67,6 +88,7 @@
 	      <input v-model="item.end">
 	    </li>
 	  </ol>
+
           <button v-on:click="event_add">Add</button>
 	</div>
 
@@ -78,6 +100,10 @@
         items = [] ;  
         items_vis = new vis.DataSet() ;
 	timeline_data2items(items_vis, items) ;
+
+        // textarea
+        data_txt = document.getElementById('data') ;
+	data_txt.value = JSON.stringify(items) ;
 
         // div-visualization
         container = document.getElementById('visualization') ;
@@ -95,16 +121,16 @@
 	  methods: {
 	    event_add: function () {
 
-                  var id  = this.items.length + 1 ;
-                  var ts1 = new Date() ;
-                  var ts2 = new Date() ;
-                  ts2.setDate(ts2.getDate() + 1);
+                  var id       = this.items.length + 1 ;
+                  var ts       = new Date() ;
+                  var ts_start = ts.toISOString() ;
+                  var ts_stop  = ts.toISOString() ;
 
 	          this.items.push({ 
-                      'id':      id,
+                      'id':       id,
                       'content': 'event ' + id,
-                      'start':   ts1.toISOString(),
-                      'end':     ts2.toISOString()
+                      'start':   ts_start,
+                      'end':     ts_stop
                   }) ;
 
 		  timeline_data2items(items_vis, this.items) ;
@@ -117,6 +143,7 @@
         $.getJSON("data-1.json", 
                     function(json) {
                           app._data.items = json ;
+                          data_txt.value  = JSON.stringify(json) ;
                           timeline_data2items(items_vis, json) ;
 		          timeline.fit() ;
                     });
