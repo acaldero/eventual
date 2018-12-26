@@ -113,13 +113,18 @@
 	  }
 	}) ;
 
+        // subscribe to any change in the DataSet
+        items_vis.on('*', function (event, properties, senderId) {
+            //console.log('event', event, properties) ;
+              app._data.items = items_vis.get() ;
+        }) ;
+
         // get data...
         $.getJSON("data-1.json", 
                     function(json) {
-                          app._data.items = json ;
                           timeline_data2items(items_vis, json) ;
 		          timeline.fit() ;
-                    });
+                    }) ;
     }
     catch(err)
     {
