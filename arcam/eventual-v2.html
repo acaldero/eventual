@@ -41,58 +41,56 @@
     <script src="external/vue.js"></script>
     <script src="external/vis.js"></script>
     <link href="external/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
-    <script src="external/vue2vis.min.js"></script>
-    <script src="external/moment.min.js"></script>
+
+    <!-- Internal: timeline -->
+    <script src="timeline.js"></script>
 </head>
 
 
 <body>
 
-    <h1>TimeLine</h1>
+        <h1>TimeLine</h1>
 
-    <div id="app">
-      <timeline ref="timeline" :items="items" :groups="groups" :options="options">
-      </timeline>
-    </div>
+        <p></p>
+	<div id="visualization"></div>
+
+        <p></p>
+	<div id="app">
+	  {{ message }}
+          <br/>
+	  <ol>
+	    <li v-for="item in items"
+	        v-bind:todo="item"
+	        v-bind:key="item.id">
+	      <input v-model="item.content">
+	      <input v-model="item.start">
+	      <input v-model="item.end">
+	    </li>
+	  </ol>
+          <button v-on:click="event_add">Add</button>
+	</div>
+
 
 <script type="text/javascript">
     try
     {
         // data
-        Vue.component('timeline', 
-                      vue2vis.Timeline);
-        ItemComponent = Vue.extend({ 
-                                      template: '<p>{{item.content}}</p>', 
-                                      props: ['item'], 
-                                   });
+        items = [] ;  
+        items_vis = new vis.DataSet() ;
+	timeline_data2items(items_vis, items) ;
+
+        // div-visualization
+        container = document.getElementById('visualization') ;
+        timeline  = timeline_new(items_vis, container) ;
 
         // vue
 	var app = new Vue({
 	  el: '#app',
 
-          data() {
-	  return {
-	     groups: [
-			{ id: 0, content: 'Meal' },
-			{ id: 1, content: 'Sport' },
-			{ id: 2, content: 'Dose' }
-		     ],
-	     items:  [ 
-		        { id: 0, group: 0, start: new Date(), content: 'Item 0' },
-		        { id: 1, group: 0, start: new Date(), content: 'Item 1' } 
-                     ],
-	     options: {
-			editable: true,
-			template: (item) => {
-				return new ItemComponent({
-					      store: this.$store,
-					      parent: this,
-					      propsData: { item, },
-				       }).$mount().$el;
-			}
-		      }
-	  }
-          },
+	  data: {
+	    message: 'Event list',
+	    items: items 
+	  },
 
 	  methods: {
 	    event_add: function () {
@@ -110,14 +108,24 @@
                       'start':   ts1.toISOString(),
                       'end':     ts2.toISOString()
                   }) ;
+
+		  timeline_data2items(items_vis, this.items) ;
+		  timeline.fit() ;
 	    }
 	  }
 	}) ;
 
+        // subscribe to any change in the DataSet
+        items_vis.on('*', function (event, properties, senderId) {
+            //console.log('event', event, properties) ;
+              app._data.items = items_vis.get() ;
+        }) ;
+
         // get data...
-        $.getJSON("data-2.json", 
-                    function(data) {
-			  app._data.items = data ;
+        $.getJSON("data-1.json", 
+                    function(json) {
+                          timeline_data2items(items_vis, json) ;
+		          timeline.fit() ;
                     }) ;
     }
     catch(err)
