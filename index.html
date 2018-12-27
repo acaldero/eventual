@@ -115,10 +115,17 @@
 	}) ;
 
         // get data...
-        $.getJSON("data-2.json", 
-                    function(data) {
-			  app._data.items = data ;
-                    }) ;
+	var url = 'data-2.json' ;
+	var data = {
+	  q: 'search',
+	  text: 'data'
+	} ;
+	$.getJSON(url, data, function (data, status) {
+	  if (status === 200) {
+              console.log(data);
+	      app._data.items = data ;
+	  }
+	});
     }
     catch(err)
     {
