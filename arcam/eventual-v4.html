@@ -37,13 +37,15 @@
     <script src="external/popper.min.js"></script>
     <script src="external/bootstrap.min.js"></script>
     <link async href="external/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">
 
     <script src="external/vue.js"></script>
     <script src="external/vis.js"></script>
     <link href="external/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
     <script src="external/vue2vis.min.js"></script>
     <script src="external/moment.min.js"></script>
+
+    <!-- Internal -->
+    <script src="xchange.js"></script>
 </head>
 
 
@@ -55,68 +57,59 @@
 	       <li class="nav-item">Eventual&nbsp;<span class="badge badge-pill badge-secondary">1.0</span></li>
 	    </ul>
             </span>
-            <button class="navbar-toggler ml-auto btn-outline-secondary btn-border-dark" data-toggle="collapse"
-                    data-target="#navbarQMenu"
-                    aria-controls="navbarQMenu" aria-expanded="false" aria-label="Toggle navigation">
-                <em class="fas fa-bars"></em>
-            </button>
-            <div id="navbarQMenu" 
-                 class="collapse navbar-collapse mx-auto p-2" style="background-color: #EAEAEA">
-		  <button class="btn btn-sm btn-white border-dark" 
-			  type="button" 
-			  data-toggle="collapse" data-target="#collapse-1" 
-			  aria-expanded="false" aria-controls="collapse-1">
-		      Timeline
-		  </button>
-		  <button class="btn btn-sm btn-white border-dark" 
-			  type="button" 
-			  data-toggle="collapse" data-target="#collapse-2" 
-			  aria-expanded="false" aria-controls="collapse-2">
-		      Export + Import
-		  </button>
+            <div class="collapse navbar-collapse mx-auto py-0" style="background-color: #EAEAEA">
+	    <ul class="nav nav-pills ml-auto p-1">
+	       <li class="nav-item">GPL 3.0</li>
+	    </ul>
             </div>
 	</nav>
 
 
-	<div class="collapse show" id="collapse-1">
-	  <div class="card card-body">
+	<div id="carousel-1" class="carousel">
+          <ol class="carousel-indicators">
+              <li data-target="#carousel-1" data-slide-to="0" class="active"></li>
+              <li data-target="#carousel-1" data-slide-to="1"></li>
+              <li data-target="#carousel-1" data-slide-to="2"></li>
+          </ol>
+	  <div class="carousel-inner">
+	    <div class="carousel-item active">
 
-	    <br/>
-	    <h1>TimeLine</h1>
+		    <h1>TimeLine</h1>
 
-	    <div id="app">
-	      <timeline ref="timeline" :items="items" :groups="groups" :options="options">
-	      </timeline>
+		    <div id="app">
+		      <timeline ref="timeline" :items="items" :groups="groups" :options="options">
+		      </timeline>
+		    </div>
+
 	    </div>
+	    <div class="carousel-item">
 
-	  </div>
-	</div>
+		    <h1>Import + Export</h1>
 
+                    <textarea id="data"></textarea>
 
-	<div class="collapse" id="collapse-2">
-	  <div class="card card-body">
+		    <div class="buttons">
+		      <input type="button" id="load" 
+		    	     value="&darr; Load" 
+			     onclick="data_txt = document.getElementById('data');
+                                      timeline_json2items(items, data_txt.value);
+				      timeline.fit();
+				      return false;"
+			     title="Load data from textarea into the Timeline">
+		      <input type="button" id="save" 
+			     value="&uarr; Save" 
+			     onclick="data_txt = document.getElementById('data');
+                                      data_txt.value = timeline_items2json(items);
+				      return false;"
+		    	     title="Save data from the Timeline into the textarea">
+		    </div>
 
-	    <br/>
-	    <h1>Import + Export</h1>
-
-	    <div class="buttons justify-content-end">
-	      <input type="button" id="load" 
-		     value="&uarr; Load" 
-		     onclick="var data_txt = $('#data').text() ;
-			      app._data.items = JSON.parse(data_txt) ;
-			      return false ;"
-		     title="Load data from textarea into the Timeline">
-	      <input type="button" id="save" 
-		     value="&darr; Save" 
-		     onclick="var items = app._data.items ;
-			      var data_txt = JSON.stringify(items, null, 2)
-			      $('#data').text(data_txt) ;
-			      return false ;"
-		     title="Save data from the Timeline into the textarea">
 	    </div>
+	    <div class="carousel-item">
 
-	    <textarea id="data" rows="15"></textarea>
+                    xxx
 
+	    </div>
 	  </div>
 	</div>
 
