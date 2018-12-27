@@ -104,14 +104,14 @@
 		     value="&uarr; Load" 
 		     onclick="var data_txt = $('#data').val() ;
 			      var data_obj = JSON.parse(data_txt) ;
-			      app._data.items.values(data_obj) ;
+			      app._data.items = data_obj ;
 			      return false ;"
 		     title="Load data from textarea into the Timeline">
 	      <input type="button" id="save" 
 		     value="&darr; Save" 
 		     onclick="var items = app._data.items ;
 			      var data_txt = JSON.stringify(items, null, 2)
-			      $('#data').text(data_txt) ;
+			      $('#data').val(data_txt) ;
 			      return false ;"
 		     title="Save data from the Timeline into the textarea">
 	    </div>
