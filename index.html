@@ -61,7 +61,7 @@
                 <em class="fas fa-bars"></em>
             </button>
             <div id="navbarQMenu" 
-                 class="collapse navbar-collapse mx-auto p-2" style="background-color: #EAEAEA">
+                 class="collapse navbar-collapse ml-auto p-2 justify-content-end">
 		  <button class="btn btn-sm btn-white border-dark" 
 			  type="button" 
 			  data-toggle="collapse" data-target="#collapse-1" 
@@ -102,8 +102,9 @@
 	    <div class="buttons justify-content-end">
 	      <input type="button" id="load" 
 		     value="&uarr; Load" 
-		     onclick="var data_txt = $('#data').text() ;
-			      app._data.items = JSON.parse(data_txt) ;
+		     onclick="var data_txt = $('#data').val() ;
+			      var data_obj = JSON.parse(data_txt) ;
+			      app._data.items.values(data_obj) ;
 			      return false ;"
 		     title="Load data from textarea into the Timeline">
 	      <input type="button" id="save" 
@@ -188,7 +189,7 @@
 	$.getJSON(url, data, function (data, status) {
 	  if (status === 200) {
               console.log(data);
-	      app._data.items = data ;
+	      app._data.items.values(data) ;
 	  }
 	});
     }
